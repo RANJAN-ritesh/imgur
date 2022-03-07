@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/index.css">
+    
+</head>
+<body onload="getItems()" id="body">
+    <div id="navbar">
+        <div id="image">
+            <img src="./img/Screenshot (343).png"/>
+        </div>
+        <div id="searchDiv">
+            <input type="text" id="search" placeholder="search for your required images "/>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+width="30" height="30"
+viewBox="0 0 172 172"
+style=" fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M74.53333,17.2c-31.59642,0 -57.33333,25.73692 -57.33333,57.33333c0,31.59642 25.73692,57.33333 57.33333,57.33333c13.73998,0 26.35834,-4.87915 36.24766,-12.97839l34.23203,34.23203c1.43802,1.49778 3.5734,2.10113 5.5826,1.57735c2.0092,-0.52378 3.57826,-2.09284 4.10204,-4.10204c0.52378,-2.0092 -0.07957,-4.14458 -1.57735,-5.5826l-34.23203,-34.23203c8.09924,-9.88932 12.97839,-22.50768 12.97839,-36.24766c0,-31.59642 -25.73692,-57.33333 -57.33333,-57.33333zM74.53333,28.66667c25.39937,0 45.86667,20.4673 45.86667,45.86667c0,25.39937 -20.46729,45.86667 -45.86667,45.86667c-25.39937,0 -45.86667,-20.46729 -45.86667,-45.86667c0,-25.39937 20.4673,-45.86667 45.86667,-45.86667z"></path></g></g></svg>
+</div>
+        </div>
+        <div id="signDiv">
+            <button>Log In</button>
+            <button>Sign Up</button>
+        </div>
+    </div>
+
+    <div id="feeds">
+        <div id="itemsImg">
+
+        </div>
+
+    </div>
+</body>
+</html>
+
+<script >
+  function getItems(){
+        let key = '32874768dbef4e2bb646a147591d811b'
+        fetch(`https://newsapi.org/v2/everything?q=World&sortBy=popularity&apiKey=${key}`)
+    .then(response => response.json())
+      .then(data => {console.log(data)
+        printData(data)});
+       }
+       function printData(data){
+           const items = data.articles
+           const itemsImg = document.getElementById('itemsImg')
+
+           items.map((e)=>{
+              
+              let img = document.createElement('img')
+              img.src = e.urlToImage
+    
+              let itemsDiv = document.createElement('div')
+
+              let name = document.createElement('p')
+              name.textContent = e.title
+              
+              let date = document.createElement('p')
+              date.textContent = e.publishedAt
+              let itemsDiv2 = document.createElement('div')
+
+              let parentDiv = document.createElement('div')
+              parentDiv.onclick = ()=>{
+                  showItems(e)
+              }
+             
+              itemsDiv.append(img)
+              itemsDiv2.append(name,date)
+              parentDiv.append(itemsDiv,itemsDiv2)
+              itemsImg.append(parentDiv)
+
+
+           })
+       }
+    
+function showItems(e){
+    localStorage.setItem("itemsDetails",JSON.stringify(e))
+    window.open('details.html',"_blank")
+    
+}
+  
+</script>
